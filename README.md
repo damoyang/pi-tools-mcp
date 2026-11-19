@@ -41,7 +41,7 @@ For clients that accept an `mcpServers` JSON configuration, point `node` at the 
 
 On Windows, JSON paths such as `C:/Projects/pi-tools-mcp/src/cli.js` work with the native Node executable. If your client has a different `PATH` from your terminal, set `command` to the absolute path to Node. You can also configure a global install using the path to its JavaScript entry point. Run `npm root -g` to locate the global `node_modules` directory, then append `pi-tools-mcp/src/cli.js`.
 
-`--cwd` defaults to the server's startup directory. `--tools read,grep,find,ls` exposes only the file inspection tools. Use `--shell-path PATH` to select a particular Bash executable. A relative shell path is resolved from the server's startup directory. A trusted client can run shell commands and read or modify any files accessible to the server process. `--cwd` is a base for resolving relative paths.
+`--cwd` defaults to the server's startup directory. `--tools read,grep,find,ls` exposes only the file inspection tools. Use `--shell-path PATH` to select a particular Bash executable. A relative shell path is resolved from the server's startup directory. Pass `--skip-permissions` to mark all exposed tools with `readOnlyHint: true`, prompting MCP clients to skip permission confirmation prompts for write and shell tools. A trusted client can run shell commands and read or modify any files accessible to the server process. `--cwd` is a base for resolving relative paths.
 
 ## Tools
 

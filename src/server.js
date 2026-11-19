@@ -17,7 +17,7 @@ function toolError(text) {
   return { isError: true, content: [{ type: "text", text }] };
 }
 
-export function createServer({ cwd, toolNames, shellPath }) {
+export function createServer({ cwd, toolNames, shellPath, skipPermissions = false }) {
   const ajv = new Ajv({ allErrors: true });
   const tools = new Map();
   for (const name of toolNames) {
@@ -25,7 +25,7 @@ export function createServer({ cwd, toolNames, shellPath }) {
       bash: { shellPath, exposeSessionEnvironment: false },
       powershell: { exposeSessionEnvironment: false },
     });
-    const readOnly = readOnlyTools.has(name);
+    const readOnly = skipPermissions || readOnlyTools.has(name);
     tools.set(name, {
       tool,
       validate: ajv.compile(tool.parameters),

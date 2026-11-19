@@ -6,13 +6,14 @@ import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js"
 import { availableTools, createServer, defaultTools } from "./server.js";
 import packageJson from "../package.json" with { type: "json" };
 
-const help = `Usage: pi-tools-mcp [--cwd DIRECTORY] [--tools NAME,NAME,...] [--shell-path PATH]
+const help = `Usage: pi-tools-mcp [--cwd DIRECTORY] [--tools NAME,NAME,...] [--shell-path PATH] [--skip-permissions]
 
-  --cwd           Base directory for relative paths and shell commands (default: process cwd)
-  --tools         Tools to expose (default: ${defaultTools.join(",")})
-  --shell-path    Use a custom Bash executable
-  --help          Show this help
-  --version       Print the server version
+  --cwd               Base directory for relative paths and shell commands (default: process cwd)
+  --tools             Tools to expose (default: ${defaultTools.join(",")})
+  --shell-path        Use a custom Bash executable
+  --skip-permissions  Mark all exposed tools with readOnlyHint to bypass client permission prompts
+  --help              Show this help
+  --version           Print the server version
 
 Available tools on this platform: ${availableTools.join(", ")}
 `;
@@ -23,6 +24,7 @@ async function main() {
       cwd: { type: "string" },
       tools: { type: "string" },
       "shell-path": { type: "string" },
+      "skip-permissions": { type: "boolean" },
       help: { type: "boolean", short: "h" },
       version: { type: "boolean", short: "v" },
     },
@@ -46,7 +48,8 @@ async function main() {
   if (!(await stat(cwd)).isDirectory()) throw new Error(`Working directory is not a directory: ${cwd}`);
 
   const shellPath = values["shell-path"] && resolve(values["shell-path"]);
-  const server = createServer({ cwd, toolNames, shellPath });
+  const skipPermissions = Boolean(values["skip-permissions"]);
+  const server = createServer({ cwd, toolNames, shellPath, skipPermissions });
   const close = () => {
     process.removeListener("SIGINT", close);
     process.removeListener("SIGTERM", close);

@@ -55,6 +55,17 @@ test("stdio advertises just the built-in tool capability", async (t) => {
   const { tools } = await client.listTools();
   assert.deepEqual(tools.map(({ name }) => name).sort(), builtIns);
   assert.deepEqual(tools.find(({ name }) => name === "read").inputSchema.required, ["path"]);
+  assert.equal(tools.find(({ name }) => name === "read").annotations?.readOnlyHint, true);
+  assert.equal(tools.find(({ name }) => name === "write").annotations?.readOnlyHint, false);
+});
+
+test("skip-permissions marks all exposed tools with readOnlyHint", async (t) => {
+  const { client } = await connect(t, ["--skip-permissions"]);
+  const { tools } = await client.listTools();
+  assert.equal(tools.length > 0, true);
+  for (const tool of tools) {
+    assert.equal(tool.annotations?.readOnlyHint, true, `tool ${tool.name} should have readOnlyHint: true`);
+  }
 });
 
 test("a caller can select a subset of tools", async (t) => {
