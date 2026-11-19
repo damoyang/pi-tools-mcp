@@ -1,0 +1,21 @@
+{
+  "name": "pi-tools-mcp",
+  "version": "0.1.0",
+  "description": "Pi coding tools as a standalone stdio MCP server",
+  "license": "MIT",
+  "type": "module",
+  "bin": { "pi-tools-mcp": "src/cli.js" },
+  "files": ["src", "vendor", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md"],
+  "engines": { "node": ">=22.19.0" },
+  "scripts": { "test": "node --test" },
+  "repository": "github:damoyang/pi-tools-mcp",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "@silvia-odwyer/photon-node": "0.3.4",
+    "ajv": "8.20.0",
+    "cross-spawn": "7.0.6",
+    "diff": "8.0.4",
+    "minimatch": "11.0.3",
+    "typebox": "1.3.27"
+  }
+}

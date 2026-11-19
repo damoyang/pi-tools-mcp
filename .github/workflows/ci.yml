@@ -1,0 +1,42 @@
+name: Cross-platform MCP tests
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  stdio:
+    name: ${{ matrix.os }} / ${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 12
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            arch: x64
+          - os: ubuntu-24.04-arm
+            arch: arm64
+          - os: macos-15-intel
+            arch: x64
+          - os: macos-15
+            arch: arm64
+          - os: windows-2025
+            arch: x64
+          - os: windows-11-arm
+            arch: arm64
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22.19.0
+          architecture: ${{ matrix.arch }}
+          package-manager-cache: false
+      - run: node -e "if (process.arch !== '${{ matrix.arch }}') process.exit(1)"
+      - run: npm ci
+      - run: npm test
+        env:
+          PI_TOOLS_MCP_BIN_DIR: ${{ runner.temp }}/pi-tools-mcp-bin
