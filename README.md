@@ -4,10 +4,10 @@ A local stdio MCP server for the built-in coding tools from [Pi v1.5.2](https://
 
 ## Install
 
-Install the package from the [GitHub release](https://github.com/damoyang/pi-tools-mcp/releases/tag/v0.1.0).
+Install the current CLI from the [GitHub main branch](https://github.com/damoyang/pi-tools-mcp/tree/main).
 
 ```sh
-npm install -g https://github.com/damoyang/pi-tools-mcp/releases/download/v0.1.0/pi-tools-mcp-0.1.0.tgz
+npm install -g https://github.com/damoyang/pi-tools-mcp/archive/refs/heads/main.tar.gz
 pi-tools-mcp --help
 ```
 
